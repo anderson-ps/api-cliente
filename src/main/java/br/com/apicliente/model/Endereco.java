@@ -5,10 +5,6 @@ import javax.persistence.*;
 @Entity
 public class Endereco {
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    @Column(name = "id", nullable = false)
-    private Long id;
-
     private String cep;
     private String logradouro;
     private String complemento;
@@ -18,15 +14,6 @@ public class Endereco {
     private String gia;
     private String ddd;
     private String siafi;
-
-
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
 
     public String getCep() {
         return cep;

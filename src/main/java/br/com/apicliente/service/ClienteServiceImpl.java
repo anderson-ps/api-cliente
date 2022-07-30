@@ -24,6 +24,20 @@ public class ClienteServiceImpl implements ClienteService {
         return clienteRepository.findAll();
     }
 
+    private void salvarClienteComCep(Cliente cliente) {
+        // Verificar se o Endereco do Cliente já existe (pelo CEP).
+        String cep = cliente.getEndereco().getCep();
+        Endereco endereco = enderecoRepository.findById(cep).orElseGet(() -> {
+            // Caso não exista, integrar com o ViaCEP e persistir o retorno.
+            Endereco novoEndereco = viaCepService.consultarCep(cep);
+            enderecoRepository.save(novoEndereco);
+            return novoEndereco;
+        });
+        cliente.setEndereco(endereco);
+        // Inserir Cliente, vinculando o Endereco (novo ou existente).
+        clienteRepository.save(cliente);
+    }
+
     @Override
     public Cliente buscarPorId(Long id) {
         Optional<Cliente> cliente = clienteRepository.findById(id);
@@ -32,17 +46,14 @@ public class ClienteServiceImpl implements ClienteService {
 
     @Override
     public void inserir(Cliente cliente) {
-        String cep = cliente.getEndereco().getCep();
-        Endereco novoEndereco = viaCepService.consultarCep(cep);
-        cliente.setEndereco(novoEndereco);
-        clienteRepository.save(cliente);
+        salvarClienteComCep(cliente);
     }
 
     @Override
     public void atualizar(Long id, Cliente cliente) {
         Optional<Cliente> clienteBd = clienteRepository.findById(id);
         if (clienteBd.isPresent()) {
-            inserir(cliente);
+            salvarClienteComCep(cliente);
         }
     }
 

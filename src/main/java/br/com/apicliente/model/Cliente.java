@@ -6,12 +6,13 @@ import javax.persistence.*;
 public class Cliente {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    @Column(name = "id", nullable = false)
     private Long id;
 
     private String nome;
     private String telefone;
     private String email;
+    @ManyToOne
+    @JoinColumn(name = "endereco_id")
     private Endereco endereco;
 
     public Long getId() {

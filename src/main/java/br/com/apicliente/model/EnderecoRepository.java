@@ -2,5 +2,5 @@ package br.com.apicliente.model;
 
 import org.springframework.data.repository.CrudRepository;
 
-public interface EnderecoRepository  extends CrudRepository {
+public interface EnderecoRepository  extends CrudRepository<Endereco,String> {
 }
